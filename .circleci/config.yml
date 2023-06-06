@@ -18,7 +18,7 @@ jobs:
           name: Build and Package
           command: |
             # Build your Python package
-            python setup.py sdist bdist_wheel
+            python main.py sdist bdist_wheel
 
             # Create a directory to store the artifacts
             mkdir -p artifacts
