@@ -1,10 +1,5 @@
 version: 2.1
 
-machine:
-
-  pre:
-    - bash ./test_circle_bash.sh
-
 jobs:
   build:
     docker:
@@ -31,11 +26,14 @@ jobs:
             # Move to the root directory
             cd ~/repo
 
-            # Run the custom build script
-            ./build.sh
+            # Check if the required file exists
+            if [ ! -f "file.txt" ]; then
+              echo "File.txt is missing. Aborting the build."
+              exit 1
+            fi
 
             # Move the generated artifacts to the artifacts directory
-            mv <path_to_artifacts>/* artifacts/
+            mv dist/* artifacts/
 
       - persist_to_workspace:
           root: .
