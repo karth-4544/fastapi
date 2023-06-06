@@ -17,14 +17,15 @@ jobs:
       - run:
           name: Build and Package
           command: |
-            # Build your Python package
-            python main.py sdist bdist_wheel
+            # Install dependencies
+            pip install -r requirements.txt
 
             # Create a directory to store the artifacts
             mkdir -p artifacts
 
-            # Move the generated package artifacts to the artifacts directory
-            mv dist/* artifacts/
+            # Move the required files or directories to the artifacts directory
+            # Replace <path_to_files> with the appropriate file or directory paths
+            cp <path_to_files> artifacts/
 
       - persist_to_workspace:
           root: .
@@ -46,8 +47,8 @@ jobs:
           name: Push Docker Image to Docker Hub
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker build -t karthik4544/fastapi:tagname
-            docker push karthik4544/fastapi:tagname
+            docker build -t karthik4544/fastapi:latest .
+            docker push karthik4544/fastapi:latest
 
       - store_artifacts:
           path: artifacts
@@ -58,5 +59,4 @@ workflows:
     jobs:
       - build
       - publish
-      
-      
+
