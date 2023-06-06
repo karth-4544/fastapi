@@ -43,6 +43,7 @@ jobs:
             docker build -t karthik4544/fastapi:latest -f Dockerfile .
             docker push karthik4544/fastapi:latest
 
+     working_directory: ~/repo
       - store_artifacts:
           path: artifacts
 
