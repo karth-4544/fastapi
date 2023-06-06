@@ -20,8 +20,14 @@ jobs:
             # Install dependencies
             pip install -r requirements.txt
 
+            # Build your Python package
+            python setup.py sdist bdist_wheel
+
             # Create a directory to store the artifacts
             mkdir -p artifacts
+
+            # Move the generated package artifacts to the artifacts directory
+            mv dist/* artifacts/
 
       - persist_to_workspace:
           root: .
@@ -37,14 +43,17 @@ jobs:
           at: .
 
       - run:
-          name: Push Docker Image to Docker Hub
+          name: Push Artifacts to Docker Hub
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker build -t karthik4544/fastapi:latest -f Dockerfile .
-            docker push karthik4544/fastapi:latest
 
-      - store_artifacts:
-          path: artifacts
+            # Create a tarball of the artifacts
+            tar czf package_artifacts.tar.gz artifacts/
+
+            # Tag and push the tarball as a build artifact to Docker Hub
+            docker run -v $PWD:/data -w /data karthik4544/fastapi:latest cp package_artifacts.tar.gz /data
+
+            docker push karthik4544/fastapi:latest
 
 workflows:
   version: 2
@@ -52,4 +61,3 @@ workflows:
     jobs:
       - build
       - publish
-
