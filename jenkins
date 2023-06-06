@@ -15,8 +15,8 @@ pipeline {
         }
         stage('Push the Docker image') {
             steps {
-                sh 'sudo docker image push karthik4544/newimage:latest'
-                sh 'sudo docker image push karthik4544/newimage:${BUILD_NUMBER}'
+                sh 'sudo docker image push karthik4544/kopsimage:latest'
+                sh 'sudo docker image push karthik4544/kopsimage:${BUILD_NUMBER}'
             }
         }
 
