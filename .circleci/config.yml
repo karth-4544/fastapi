@@ -46,8 +46,8 @@ jobs:
           name: Push Docker Image to Docker Hub
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker build -t karthik4544/fastapi:latest .
-            docker push karthik4544/fastapi:latest
+            docker build -t karthik4544/fastapi:tagname
+            docker push karthik4544/fastapi:tagname
 
       - store_artifacts:
           path: artifacts
