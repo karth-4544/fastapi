@@ -20,14 +20,8 @@ jobs:
             # Install dependencies
             pip install -r requirements.txt
 
-            # Build your Python package
-            python setup.py sdist bdist_wheel
-
             # Create a directory to store the artifacts
             mkdir -p artifacts
-
-            # Move the generated package artifacts to the artifacts directory
-            mv dist/* artifacts/
 
       - persist_to_workspace:
           root: .
@@ -42,14 +36,11 @@ jobs:
       - attach_workspace:
           at: .
 
-      - setup_remote_docker:
-          version: 20.10.7
-
       - run:
           name: Push Docker Image to Docker Hub
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker build -t karthik4544/fastapi:latest .
+            docker build -t karthik4544/fastapi:latest -f Dockerfile .
             docker push karthik4544/fastapi:latest
 
       - store_artifacts:
