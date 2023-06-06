@@ -14,26 +14,7 @@ jobs:
           name: Upgrade pip
           command: python -m pip install --upgrade pip
 
-  build:
-    working_directory: /tmp
-      
-    steps:
-   
-   - run:
-        name: Creating Dummy Artifacts
-        command: |
-          echo "my artifact file" > /tmp/art-1;
-          mkdir /tmp/artifacts;
-          echo "my artifact files in a dir" > /tmp/artifacts/art-2;
-
-    - store_artifacts:
-        path: /tmp/art-1
-        destination: artifact-file
-
-    - store_artifacts:
-        path: /tmp/artifacts
-        
-    - run:
+      - run:
           name: Build and Package
           command: |
             # Install dependencies
@@ -42,7 +23,7 @@ jobs:
             # Build your Python package
             python setup.py sdist bdist_wheel
 
-            # Create a directory to store the artifacts
+            # Create the artifacts directory if it doesn't exist
             mkdir -p artifacts
 
             # Move the generated package artifacts to the artifacts directory
@@ -53,30 +34,8 @@ jobs:
           paths:
             - artifacts/
 
-  publish:
-    docker:
-      - image: circleci/python:3.8
-
-    steps:
-      - attach_workspace:
-          at: .
-
-      - run:
-          name: Push Artifacts to Docker Hub
-          command: |
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
-            # Create a tarball of the artifacts
-            tar czf package_artifacts.tar.gz artifacts/
-
-            # Tag and push the tarball as a build artifact to Docker Hub
-            docker run -v $PWD:/data -w /data karthik4544/fastapi:latest cp package_artifacts.tar.gz /data
-
-            docker push karthik4544/fastapi:latest
-
 workflows:
   version: 2
   build_workflow:
     jobs:
       - build
-      - publish
