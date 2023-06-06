@@ -24,8 +24,8 @@ jobs:
             mkdir -p artifacts
 
             # Move the required files or directories to the artifacts directory
-            # Replace <path_to_files> with the appropriate file or directory paths
-            cp <path_to_files> artifacts/
+            cp data.txt artifacts/
+            cp -r config artifacts/
 
       - persist_to_workspace:
           root: .
@@ -59,4 +59,3 @@ workflows:
     jobs:
       - build
       - publish
-
