@@ -1,4 +1,4 @@
-Set official base image
+Set the base image
 FROM python:3.8.1-alpine
 
  Set work directory
