@@ -20,14 +20,11 @@ jobs:
             # Install dependencies
             pip install -r requirements.txt
 
-            # Build your Python package
-            python setup.py sdist bdist_wheel
-
             # Create a directory to store the artifacts
             mkdir -p artifacts
 
-            # Move the generated package artifacts to the artifacts directory
-            mv dist/* artifacts/
+            # Move the required directories to the artifacts directory
+            cp -r config artifacts/
 
       - persist_to_workspace:
           root: .
@@ -43,14 +40,14 @@ jobs:
           at: .
 
       - run:
-          name: Publish Python Package to PyPI
+          name: Push Docker Image to Docker Hub
           command: |
-            echo "[distutils]" > ~/.pypirc
-            echo "index-servers = pypi" >> ~/.pypirc
-            echo "[pypi]" >> ~/.pypirc
-            echo "username:$PYPI_USERNAME" >> ~/.pypirc
-            echo "password:$PYPI_PASSWORD" >> ~/.pypirc
-            twine upload --config-file ~/.pypirc artifacts/*
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker build -t karthik4544/fastapi:latest -f Dockerfile .
+            docker push karthik4544/fastapi:latest
+
+      - store_artifacts:
+          path: artifacts
 
 workflows:
   version: 2
