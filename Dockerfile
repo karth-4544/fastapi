@@ -1,4 +1,4 @@
-Pull official base image
+Set official base image
 FROM python:3.8.1-alpine
 
  Set work directory
