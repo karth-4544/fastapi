@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Pull Code From GitHub') {
             steps {
-                git 'https://github.com/shankysai/kopsprojectdec22.git'
+                git 'https://github.com/karth-4544/fastapi.git'
             }
         }
         stage('Build the Docker image') {
