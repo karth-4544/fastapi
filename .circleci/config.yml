@@ -17,9 +17,6 @@ jobs:
       - run:
           name: Build and Package
           command: |
-            # Install dependencies
-            pip install -r requirements.txt
-
             # Build your Python package
             python setup.py sdist bdist_wheel
 
