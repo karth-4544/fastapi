@@ -23,9 +23,6 @@ jobs:
             # Create a directory to store the artifacts
             mkdir -p artifacts
 
-            # Move the required directories to the artifacts directory
-            cp -r config artifacts/
-
       - persist_to_workspace:
           root: .
           paths:
