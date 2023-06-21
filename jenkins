@@ -14,10 +14,8 @@ pipeline {
             }
         }
         stage('Push the Docker image') {
-            steps {
-                sh 'sudo docker image push karthik4544/kopsimage:latest'
-                sh 'sudo docker image push karthik4544/kopsimage:${BUILD_NUMBER}'
-            }
+            withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
+   sh "docker login -u karthik4544 -p ${dockerPassword}"
         }
 
         stage('Deploy on Kubernetes') {
